@@ -51,7 +51,7 @@ public class GitHubItemsAdapter extends RecyclerView.Adapter<GitHubItemsAdapter.
             return mItems.size();
         }
 
-        public void updateAnswers(List<GitHubResponseItem> items) {
+        public void update(List<GitHubResponseItem> items) {
             mItems = items;
             notifyDataSetChanged();
         }

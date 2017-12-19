@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(response.isSuccessful()) {
                     GitHubResponse body = response.body();
-                    mAdapter.updateAnswers(body.getItems());
+                    mAdapter.update(body.getItems());
                     Log.d("MainActivity", "succesfull json load");
                 }else {
                     // handle request errors depending on status code...
