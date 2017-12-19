@@ -8,11 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.util.Log;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public GitHubItemsAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private GitHubService mService;
@@ -37,13 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("antlap", "onCreate: ");
+        Log.d(LOG_TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mService = GitHubUtils.getGitHubService();
         mRecyclerView = (RecyclerView) findViewById(R.id.git_recycler);
         mSearchQueryText = (EditText) findViewById(R.id.search_query);
         mSearchButton = (Button) findViewById(R.id.search_button);
+
+        // click on search button
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mSearchQueryText.getText().length() > 0) {
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // click on GitHub item list
         mAdapter = new GitHubItemsAdapter(this, new ArrayList<GitHubResponseItem>(0), new GitHubItemsAdapter.PostItemListener() {
 
             @Override
@@ -89,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
                     mAdapter.updateAnswers(body.getItems());
                     Log.d("MainActivity", "succesfull json load");
                 }else {
-                    int statusCode  = response.code();
-                    // handle request errors depending on status code
+                    // handle request errors depending on status code...
+                    // int statusCode  = response.code();
                 }
             }
 
@@ -108,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         // Save list state
         listState = layoutManager.onSaveInstanceState();
         state.putParcelable(LIST_STATE_KEY, listState);
-        Log.d("antlap", "onSaveInstanceState: listState = " + listState);
+        Log.d(LOG_TAG, "onSaveInstanceState: listState = " + listState);
     }
     @Override
     protected void onRestoreInstanceState(Bundle state) {
@@ -116,12 +121,12 @@ public class MainActivity extends AppCompatActivity {
         // Retrieve list state and list/item positions
         if(state != null)
             listState = state.getParcelable(LIST_STATE_KEY);
-        Log.d("antlap", "onRestoreInstanceState: listState = " + listState);
+        Log.d(LOG_TAG, "onRestoreInstanceState: listState = " + listState);
     }
 
     @Override
     protected void onResume() {
-        Log.d("antlap", "onResume: ");
+        Log.d(LOG_TAG, "onResume: ");
         super.onResume();
         if (listState != null) {
             layoutManager.onRestoreInstanceState(listState);

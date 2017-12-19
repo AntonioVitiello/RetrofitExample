@@ -14,36 +14,11 @@ import retrofit.json.example.R;
 import retrofit.json.example.models.GitHubResponseItem;
 
 public class GitHubItemsAdapter extends RecyclerView.Adapter<GitHubItemsAdapter.ViewHolder> {
+        private static final String LOG_TAG = GitHubItemsAdapter.class.getSimpleName();
 
         private List<GitHubResponseItem> mItems;
         private Context mContext;
         private PostItemListener mItemListener;
-
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
-            public TextView nameText;
-            public TextView descText;
-            CardView itemCard;
-            PostItemListener mItemListener;
-
-            public ViewHolder(View itemView, PostItemListener postItemListener) {
-                super(itemView);
-                itemCard = (CardView) itemView.findViewById(R.id.git_card);
-                nameText = (TextView) itemView.findViewById(R.id.item_name);
-                descText = (TextView) itemView.findViewById(R.id.item_description);
-
-                this.mItemListener = postItemListener;
-                itemView.setOnClickListener(this);
-            }
-
-            @Override
-            public void onClick(View view) {
-                GitHubResponseItem item = getItem(getAdapterPosition());
-                this.mItemListener.onPostClick(item.getHtmlUrl());
-
-                notifyDataSetChanged();
-            }
-        }
 
         public GitHubItemsAdapter(Context context, List<GitHubResponseItem> posts, PostItemListener itemListener) {
             mItems = posts;
@@ -53,7 +28,6 @@ public class GitHubItemsAdapter extends RecyclerView.Adapter<GitHubItemsAdapter.
 
         @Override
         public GitHubItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
             Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -65,7 +39,6 @@ public class GitHubItemsAdapter extends RecyclerView.Adapter<GitHubItemsAdapter.
 
         @Override
         public void onBindViewHolder(GitHubItemsAdapter.ViewHolder holder, int position) {
-
             GitHubResponseItem item = mItems.get(position);
             TextView firstLine = holder.nameText;
             firstLine.setText(item.getName());
@@ -90,4 +63,32 @@ public class GitHubItemsAdapter extends RecyclerView.Adapter<GitHubItemsAdapter.
         public interface PostItemListener {
             void onPostClick(String url);
         }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        public TextView nameText;
+        public TextView descText;
+        CardView itemCard;
+        PostItemListener mItemListener;
+
+        public ViewHolder(View itemView, PostItemListener postItemListener) {
+            super(itemView);
+            itemCard = (CardView) itemView.findViewById(R.id.git_card);
+            nameText = (TextView) itemView.findViewById(R.id.item_name);
+            descText = (TextView) itemView.findViewById(R.id.item_description);
+
+            this.mItemListener = postItemListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            GitHubResponseItem item = getItem(getAdapterPosition());
+            this.mItemListener.onPostClick(item.getHtmlUrl());
+
+            notifyDataSetChanged();
+        }
     }
+
+}
