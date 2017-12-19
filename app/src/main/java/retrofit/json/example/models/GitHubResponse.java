@@ -1,5 +1,8 @@
 package retrofit.json.example.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -111,7 +114,7 @@ import java.util.List;
 }
 */
 
-public class GitHubResponse {
+public class GitHubResponse implements Parcelable {
 
         @SerializedName("total_count")
         @Expose
@@ -123,7 +126,30 @@ public class GitHubResponse {
         @Expose
         private List<GitHubResponseItem> items = null;
 
-        public Integer getTotalCount() {
+    protected GitHubResponse(Parcel in) {
+        if (in.readByte() == 0) {
+            totalCount = null;
+        } else {
+            totalCount = in.readInt();
+        }
+        byte tmpIncompleteResults = in.readByte();
+        incompleteResults = tmpIncompleteResults == 0 ? null : tmpIncompleteResults == 1;
+        items = in.createTypedArrayList(GitHubResponseItem.CREATOR);
+    }
+
+    public static final Creator<GitHubResponse> CREATOR = new Creator<GitHubResponse>() {
+        @Override
+        public GitHubResponse createFromParcel(Parcel in) {
+            return new GitHubResponse(in);
+        }
+
+        @Override
+        public GitHubResponse[] newArray(int size) {
+            return new GitHubResponse[size];
+        }
+    };
+
+    public Integer getTotalCount() {
             return totalCount;
         }
 
@@ -147,4 +173,20 @@ public class GitHubResponse {
             this.items = items;
         }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (totalCount == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(totalCount);
+        }
+        dest.writeByte((byte) (incompleteResults == null ? 0 : incompleteResults ? 1 : 2));
+        dest.writeTypedList(items);
+    }
 }

@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         // Save list state
         listState = layoutManager.onSaveInstanceState();
         state.putParcelable(LIST_STATE_KEY, listState);
+        mAdapter.putAdapterState(state);
         Log.d(LOG_TAG, "onSaveInstanceState: listState = " + listState);
     }
 
@@ -121,8 +122,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         // Retrieve list state and list/item positions
-        if(state != null)
+        if(state != null) {
             listState = state.getParcelable(LIST_STATE_KEY);
+            mAdapter.updateAdapterState(state);
+        }
         Log.d(LOG_TAG, "onRestoreInstanceState: listState = " + listState);
     }
 

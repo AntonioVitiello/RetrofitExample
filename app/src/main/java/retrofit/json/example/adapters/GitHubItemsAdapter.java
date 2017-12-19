@@ -1,6 +1,7 @@
 package retrofit.json.example.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit.json.example.R;
@@ -15,8 +17,9 @@ import retrofit.json.example.models.GitHubResponseItem;
 
 public class GitHubItemsAdapter extends RecyclerView.Adapter<GitHubItemsAdapter.ViewHolder> {
         private static final String LOG_TAG = GitHubItemsAdapter.class.getSimpleName();
+    private static final String ADAPTER_STATE_KEY = "adapter_state_key";
 
-        private List<GitHubResponseItem> mItems;
+    private List<GitHubResponseItem> mItems;
         private Context mContext;
         private PostItemListener mItemListener;
 
@@ -60,7 +63,16 @@ public class GitHubItemsAdapter extends RecyclerView.Adapter<GitHubItemsAdapter.
             return mItems.get(adapterPosition);
         }
 
-        public interface PostItemListener {
+    public void putAdapterState(Bundle savedInstanceState) {
+        savedInstanceState.putParcelableArray(ADAPTER_STATE_KEY, mItems.toArray(new GitHubResponseItem[mItems.size()]));
+    }
+
+    public void updateAdapterState(Bundle savedInstanceState) {
+        GitHubResponseItem[] state  = (GitHubResponseItem[])savedInstanceState.getParcelableArray(ADAPTER_STATE_KEY);
+        mItems = Arrays.asList(state);
+    }
+
+    public interface PostItemListener {
             void onPostClick(String url);
         }
 
