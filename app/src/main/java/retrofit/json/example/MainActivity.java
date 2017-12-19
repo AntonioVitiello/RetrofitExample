@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private GitHubService mService;
     private Button mSearchButton;
     private EditText mSearchQueryText;
-    public final static String LIST_STATE_KEY = "recycler_list_state";
+    public final static String LIST_STATE_KEY = "list_state_key";
     Parcelable listState;
     RecyclerView.LayoutManager layoutManager;
 
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         state.putParcelable(LIST_STATE_KEY, listState);
         Log.d(LOG_TAG, "onSaveInstanceState: listState = " + listState);
     }
+
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
@@ -132,4 +134,5 @@ public class MainActivity extends AppCompatActivity {
             layoutManager.onRestoreInstanceState(listState);
         }
     }
+
 }
