@@ -85,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
      * https://api.github.com/search/repositories?q=retrofit
      */
     public void startSearch() {
-        mService.getItems(mSearchQueryText.getText().toString()).enqueue(new Callback<GitHubResponse>() {
+        String queryText = mSearchQueryText.getText().toString();
+        mService.getItems(queryText).enqueue(new Callback<GitHubResponse>() {
             @Override
             public void onResponse(Call<GitHubResponse> call, Response<GitHubResponse> response) {
 
